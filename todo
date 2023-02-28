@@ -1,0 +1,7 @@
+add day csv
+
+make database on railway
+connect to database
+
+insert data into database
+-models and sqlc queries to add data to database
