@@ -5,3 +5,6 @@ connect to database
 
 insert data into database
 -models and sqlc queries to add data to database
+
+
+tester
