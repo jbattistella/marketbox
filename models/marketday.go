@@ -15,4 +15,5 @@ type MarketDay struct {
 	POC0yr float64
 	POC1wk float64
 	POC1m  float64
+	Market string
 }

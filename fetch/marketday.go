@@ -66,6 +66,7 @@ func MakeMarketDay(path string) []models.MarketDay {
 			POC0yr: ytdPOC,
 			POC1wk: weekPOC,
 			POC1m:  monthPOC,
+			Market: "es",
 		})
 
 	}

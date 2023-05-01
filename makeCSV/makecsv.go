@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 type marketIntraday struct {
@@ -57,8 +58,10 @@ func MakeintradayCSV(t string) {
 	reader.TrimLeadingSpace = true
 	var es2 []marketIntraday
 
+	var counter int
+	var d string
+
 	for {
-		var counter int
 
 		line, error := reader.Read()
 		if error == io.EOF {
@@ -67,14 +70,17 @@ func MakeintradayCSV(t string) {
 			log.Fatal(error)
 		}
 
-		bidVolume, _ := strconv.Atoi(line[11])
-		askVolume, _ := strconv.Atoi(line[12])
-		delta := askVolume - bidVolume
-		d := fmt.Sprintf("%d", delta)
-
 		if counter == 0 {
 			d = "Delta"
+		} else {
+			bidVolume, _ := strconv.Atoi(line[11])
+			askVolume, _ := strconv.Atoi(line[12])
+			delta := askVolume - bidVolume
+			d = fmt.Sprintf("%d", delta)
+
 		}
+		counter++
+
 		es2 = append(es2, marketIntraday{
 			Date:           line[0],
 			Time:           line[1],
@@ -100,10 +106,13 @@ func MakeintradayCSV(t string) {
 			ONPOC:          line[32],
 			GlobexVWAP:     line[17],
 		})
-		counter++
+
 	}
 
-	file, err2 := os.Create("objects/ES5min.csv")
+	timeNow := time.Now()
+	today := timeNow.Format("01-02-2006")
+
+	file, err2 := os.Create(fmt.Sprintf("objects/ES5min_%s.csv", today))
 	defer file.Close()
 	if err2 != nil {
 		log.Fatalln("failed to open file", err2)
@@ -115,6 +124,7 @@ func MakeintradayCSV(t string) {
 		row := []string{
 			d.Date,
 			d.Time,
+			d.Open,
 			d.Last,
 			d.High,
 			d.Low,
